@@ -24,9 +24,9 @@ The training performance for one step:
 ## Quick Start
 
 ### Env Setup
-To set up the P800 environment for RLinf wan, use the base image we provide, and then run the install script in the project directory.
+To set up the P800 environment for RLinf wan, you can use the Dockerfile we provide to build the project environment locally.
 ```bash
-bash install.sh
+docker build -f DockerFile.wan.kunlun_v1.7.0 -t rlinf-kunlun:v1.7.0 .
 ```
 
 ### Download Model Weights

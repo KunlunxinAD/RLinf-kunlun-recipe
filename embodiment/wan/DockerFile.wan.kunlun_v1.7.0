@@ -1,0 +1,22 @@
+FROM iregistry.baidu-int.com/kunlunxin-self-driving/xav:26.07-py310-torch29
+
+WORKDIR /workspace
+
+ENV PATH=/opt/venvs/python310_torch29_cuda/bin:${PATH}
+
+COPY install.sh /workspace/install.sh
+
+COPY requirements.txt /workspace/requirements.txt
+
+RUN bash /workspace/install.sh \
+    && wget https://klx-sdk-release-public.su.bcebos.com/xav/rlinf/RLinf_base_env.tar.gz \
+    && tar -zxvf RLinf_base_env.tar.gz \
+    && cd /opt/venvs/python310_torch29_cuda/lib/python3.10/site-packages \
+    && patch -p1 < /workspace/RLinf_base_env/torch_xmlir_xpuml_handle.patch \
+    && cd /workspace \
+    && cp RLinf_base_env/libbkcl.so /opt/xccl/so/libbkcl.so \
+    && cp -a RLinf_base_env/output/. /opt/xre/ \
+    && rm -rf /workspace/RLinf_base_env \
+              /workspace/RLinf_base_env.tar.gz \
+              /workspace/install.sh \
+              /workspace/requirements.txt
